@@ -90,28 +90,41 @@
                 setLoading(true);
                 setHata('');
                 
-                const prompt = `Sen profesyonel bir omurga cerrahı asistanısın. Aşağıdaki hasta bilgilerini analiz ederek 4-5 cümlelik Türkçe klinik özet hazırla. Önemli bulgulara dikkat çek:
+                const prompt = `Sen Dr. Tunç Koç'un kliniğinde çalışan deneyimli bir omurga cerrahı asistanısın. Aşağıdaki hasta verilerini analiz et ve Türkçe olarak şu başlıkları içeren klinik bir değerlendirme yaz:
 
-Hasta: ${formData.adSoyad}, ${formData.yas} yaşında
-Şikayetler: ${formData.sikayetler.join(', ')}
-İlk başlangıç: ${formData.sikayetIlk}
-Şiddetlenme: ${formData.sikayetArtis}
-Yürüme mesafesi: ${formData.yurumeMesafesi}
-Gece ağrısı: ${formData.geceAgrisi}
-Acil bulgular (idrar kaçırma/uyuşma): ${formData.acilDurum}
-Ameliyat öyküsü: ${formData.ameliyatDetay || 'Yok'}
-Kan sulandırıcı: ${formData.kanSulandiriciAd || 'Kullanmıyor'}
-Genel sağlık: ${formData.genelSaglik}`;
+1. GENEL DEĞERLENDİRME: Hastanın durumunu 2-3 cümle ile özetle.
+2. ÖNE ÇIKAN BULGULAR: Dikkat çeken önemli noktaları belirt (örn: kan sulandırıcı kullanımı, ameliyat öyküsü, yürüme kısıtlılığı, gece ağrısı).
+3. OLASI TANILER: Bu bulgulara göre akla gelen 2-3 olası tanıyı belirt (disk hernisi, spinal stenoz, spondilolistezis gibi).
+4. DİKKAT EDİLMESİ GEREKENLER: Muayene öncesi veya girişim sırasında dikkat edilmesi gereken özel durumları yaz.
+
+Hasta Bilgileri:
+- Ad: ${formData.adSoyad}, Yaş: ${formData.yas}
+- Boy/Kilo: ${formData.boy}cm / ${formData.kilo}kg
+- Meslek: ${formData.meslek}
+- Şikayetler: ${formData.sikayetler.join(', ')}
+- Başlangıç: ${formData.sikayetIlk}, Şiddetlenme: ${formData.sikayetArtis}
+- Ağrı ne zaman artar: ${formData.agriKarakter}
+- Yürüme mesafesi: ${formData.yurumeMesafesi}
+- Gece ağrısı: ${formData.geceAgrisi}
+- ACİL BULGULAR (idrar kaçırma/uyuşma): ${formData.acilDurum}
+- Fizik tedavi: ${formData.fizikTedavi} ${formData.fizikTedaviFayda}
+- Girişimsel tedavi: ${formData.girisimselTedavi} ${formData.girisimselDetay}
+- Ameliyat öyküsü: ${formData.ameliyatDetay || 'Yok'}
+- Genel sağlık: ${formData.genelSaglik}
+- Kan sulandırıcı: ${formData.kanSulandiriciAd || 'Kullanmıyor'}
+- Tüm ilaçlar: ${formData.tumIlaclar}
+
+Not: Bu bir ön bilgilendirme amaçlıdır, kesin tanı değildir.`;
 
                 try {
                     const res = await fetch(
-                        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
+                        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,
                         {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
                                 contents: [{ parts: [{ text: prompt }] }],
-                                generationConfig: { temperature: 0.3, maxOutputTokens: 500 }
+                                generationConfig: { temperature: 0.3, maxOutputTokens: 800 }
                             })
                         }
                     );
