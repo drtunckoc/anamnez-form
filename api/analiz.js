@@ -16,7 +16,7 @@ export default async function handler(req, res) {
                 model: 'gpt-3.5-turbo',
                 messages: [{ role: 'user', content: prompt }],
                 temperature: 0.3,
-                max_tokens: 800
+                max_tokens: 1200
             })
         });
 
