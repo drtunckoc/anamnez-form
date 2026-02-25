@@ -100,7 +100,7 @@ export default async function handler(req, res) {
             },
             body: JSON.stringify({
                 from: 'Hasta Formu <onboarding@resend.dev>',
-                to: ['istanbulomurga@gmail.com'],
+                to: ["dr.tunckoc@gmail.com"],
                 subject: `Yeni Hasta Başvurusu — ${new Date().toLocaleDateString('tr-TR')}`,
                 html: emailHtml
             })
