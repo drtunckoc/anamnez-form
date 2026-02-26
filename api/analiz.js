@@ -118,6 +118,12 @@ KULLANILACAK HTML ELEMENTLERİ:
 
   /* HASTA ÖZETİ ALANI */
   .hasta-baslik { font-size:13px; font-weight:700; color:#0a2560; text-transform:uppercase; letter-spacing:1.5px; border-left:4px solid #64748b; padding-left:10px; margin-bottom:12px; }
+  .alt-baslik { font-size:12px; font-weight:700; color:#0a2560; text-transform:uppercase; letter-spacing:1px; margin:16px 0 8px; padding:4px 0; border-bottom:2px solid #e2e8f0; }
+  .satir { display:flex; align-items:flex-start; gap:8px; font-size:13px; line-height:1.6; padding:4px 0; border-bottom:1px solid #f8fafc; }
+  .satir:last-child { border-bottom:none; }
+  .etiket { color:#64748b; min-width:180px; font-weight:600; flex-shrink:0; font-size:12px; }
+  .deger { color:#1e293b; font-size:13px; }
+  .uyari-satir { background:#fff8f8; border-left:3px solid #c0152a; padding-left:6px; border-radius:0 4px 4px 0; }
   .hasta-metin { font-size:13px; line-height:2; color:#374151; }
 
   /* FOOTER */
