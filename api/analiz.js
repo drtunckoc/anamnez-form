@@ -87,10 +87,10 @@ KULLANILACAK HTML ELEMENTLERİ:
     font-size:13px; font-weight:700; color:#0a2560;
     text-transform:uppercase; letter-spacing:1.5px;
     border-left:4px solid #0a2560; padding-left:10px;
-    margin:20px 0 12px;
+    margin:14px 0 8px;
   }
   #rapor-icerik .bolum-baslik:first-child { margin-top:0; }
-  #rapor-icerik .metin { font-size:14px; line-height:1.75; color:#2d3748; margin:8px 0; }
+  #rapor-icerik .metin { font-size:14px; line-height:1.6; color:#2d3748; margin:4px 0; }
   #rapor-icerik .vurgu { font-weight:700; color:#0a2560; }
   #rapor-icerik .kirmizi { font-weight:700; color:#c0152a; }
   #rapor-icerik .satir {
@@ -118,8 +118,8 @@ KULLANILACAK HTML ELEMENTLERİ:
 
   /* HASTA ÖZETİ ALANI */
   .hasta-baslik { font-size:13px; font-weight:700; color:#0a2560; text-transform:uppercase; letter-spacing:1.5px; border-left:4px solid #64748b; padding-left:10px; margin-bottom:12px; }
-  .alt-baslik { font-size:12px; font-weight:700; color:#0a2560; text-transform:uppercase; letter-spacing:1px; margin:16px 0 8px; padding:4px 0; border-bottom:2px solid #e2e8f0; }
-  .satir { display:flex; align-items:flex-start; gap:8px; font-size:13px; line-height:1.6; padding:4px 0; border-bottom:1px solid #f8fafc; }
+  .alt-baslik { font-size:12px; font-weight:700; color:#0a2560; text-transform:uppercase; letter-spacing:1px; margin:14px 0 6px; padding:4px 0; border-bottom:2px solid #e2e8f0; }
+  .satir { display:flex; align-items:flex-start; gap:8px; font-size:13px; line-height:1.6; padding:4px 0; border-bottom:1px solid #f8fafc; } .satir:empty { display:none; }
   .satir:last-child { border-bottom:none; }
   .etiket { color:#64748b; min-width:180px; font-weight:600; flex-shrink:0; font-size:12px; }
   .deger { color:#1e293b; font-size:13px; }
@@ -146,7 +146,7 @@ KULLANILACAK HTML ELEMENTLERİ:
 
   <div class="bolum bolum-hasta">
     <div class="hasta-baslik">📋 Hasta Özeti</div>
-    <div class="hasta-metin">${hastaHtml}</div>
+    <div class="hasta-metin">${hastaHtml.replace(/(\s*<br>\s*){2,}/g, '<br>')}</div>
   </div>
 
   <div class="footer">
