@@ -13,16 +13,18 @@ function markdownToHtml(text) {
         .replace(/^> (.+)$/gm, '<div style="background:#fff3cd;border-left:4px solid #f59e0b;padding:10px 14px;margin:8px 0;border-radius:0 6px 6px 0;font-size:13px;">$1</div>')
         // Yatay çizgi
         .replace(/^---$/gm, '<hr style="border:none;border-top:1px solid #e8edf5;margin:16px 0;">')
-        // Tablo satırları
+        // Tablo - önce satırları işle, sonra <br> temizle
+        .replace(/^\|[-|: ]+\|$/gm, '') // separator satırını sil
         .replace(/^\|(.+)\|$/gm, (match, content) => {
             const cells = content.split('|').map(c => c.trim());
-            if (cells.every(c => /^[-:]+$/.test(c))) return ''; // separator satırını atla
-            const isHeader = content.includes('---');
-            const tag = 'td';
-            return '<tr>' + cells.map(c => `<${tag} style="padding:8px 12px;border:1px solid #e8edf5;font-size:13px;">${c}</${tag}>`).join('') + '</tr>';
+            return '<tr>' + cells.map(c => `<td style="padding:6px 10px;border:1px solid #e8edf5;font-size:13px;line-height:1.4;">${c}</td>`).join('') + '</tr>';
         })
-        // Tablo wrap
-        .replace(/((<tr>.+<\/tr>\n?)+)/g, '<table style="width:100%;border-collapse:collapse;margin:10px 0;">$1</table>')
+        // Tablo wrap - <br> olmadan
+        .replace(/(<tr>.*?<\/tr>)(\s*<br>\s*(<tr>.*?<\/tr>))+/gs, (match) => {
+            const rows = match.replace(/<br>/g, '');
+            return '<table style="width:100%;border-collapse:collapse;margin:12px 0;">' + rows + '</table>';
+        })
+        .replace(/(<tr>.*?<\/tr>)/gs, '<table style="width:100%;border-collapse:collapse;margin:12px 0;">$1</table>')
         // Code block
         .replace(/```[\s\S]*?```/g, match => {
             const code = match.replace(/```\w*\n?/, '').replace(/```/, '');
