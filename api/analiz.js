@@ -1,39 +1,3 @@
-function markdownToHtml(text) {
-    if (!text) return '';
-    return text
-        // Başlıklar
-        .replace(/^### (.+)$/gm, '<h3 style="color:#0d2d6b;font-size:14px;margin:16px 0 8px;text-transform:uppercase;letter-spacing:0.5px;">$1</h3>')
-        .replace(/^## (.+)$/gm, '<h2 style="color:#0d2d6b;font-size:16px;margin:20px 0 10px;border-bottom:2px solid #e8edf5;padding-bottom:6px;">$1</h2>')
-        .replace(/^# (.+)$/gm, '<h1 style="color:#0d2d6b;font-size:18px;margin:0 0 12px;">$1</h1>')
-        // Kalın
-        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-        // İtalik
-        .replace(/\*(.+?)\*/g, '<em>$1</em>')
-        // Blockquote
-        .replace(/^> (.+)$/gm, '<div style="background:#fff3cd;border-left:4px solid #f59e0b;padding:10px 14px;margin:8px 0;border-radius:0 6px 6px 0;font-size:13px;">$1</div>')
-        // Yatay çizgi
-        .replace(/^---$/gm, '<hr style="border:none;border-top:1px solid #e8edf5;margin:16px 0;">')
-        // Tablo - önce satırları işle, sonra <br> temizle
-        .replace(/^\|[-|: ]+\|$/gm, '') // separator satırını sil
-        .replace(/^\|(.+)\|$/gm, (match, content) => {
-            const cells = content.split('|').map(c => c.trim());
-            return '<tr>' + cells.map(c => `<td style="padding:6px 10px;border:1px solid #e8edf5;font-size:13px;line-height:1.4;">${c}</td>`).join('') + '</tr>';
-        })
-        // Tablo wrap - <br> olmadan
-        .replace(/(<tr>.*?<\/tr>)(\s*<br>\s*(<tr>.*?<\/tr>))+/gs, (match) => {
-            const rows = match.replace(/<br>/g, '');
-            return '<table style="width:100%;border-collapse:collapse;margin:12px 0;">' + rows + '</table>';
-        })
-        .replace(/(<tr>.*?<\/tr>)/gs, '<table style="width:100%;border-collapse:collapse;margin:12px 0;">$1</table>')
-        // Code block
-        .replace(/```[\s\S]*?```/g, match => {
-            const code = match.replace(/```\w*\n?/, '').replace(/```/, '');
-            return `<pre style="background:#f1f5f9;padding:12px;border-radius:6px;font-size:12px;overflow-x:auto;white-space:pre-wrap;">${code}</pre>`;
-        })
-        // Satır sonları
-        .replace(/\n/g, '<br>');
-}
-
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
@@ -52,7 +16,32 @@ export default async function handler(req, res) {
                 content.push({ type: 'image', source: { type: 'base64', media_type: mediaType, data: image.replace(/^data:image\/\w+;base64,/, '') } });
             }
         }
-        content.push({ type: 'text', text: prompt });
+
+        // Claude'a HTML formatında rapor ürettir
+        const htmlPrompt = prompt + `
+
+ÖNEMLİ FORMAT TALİMATI:
+Raporu düz metin veya markdown olarak DEĞİL, aşağıdaki HTML şablonunu kullanarak yaz.
+Sadece <div id="rapor-icerik">...</div> etiketleri arasındaki içeriği üret.
+Markdown kullanma (**, ##, | tablo vb. kullanma). Sadece HTML etiketleri kullan.
+
+KULLANILACAK HTML ELEMENTLERİ:
+- Bölüm başlığı: <div class="bolum-baslik">🚨 ACİLİYET</div>
+- Normal metin: <p class="metin">...</p>
+- Önemli vurgu: <span class="vurgu">...</span>
+- Kırmızı uyarı: <span class="kirmizi">...</span>
+- Bilgi satırı: <div class="satir"><span class="etiket">Motor Defisit:</span><span class="deger">VAR</span></div>
+- Madde listesi: <ul class="liste"><li>...</li></ul>
+- Uyarı kutusu: <div class="uyari-kutusu">...</div>
+- Bilgi kutusu: <div class="bilgi-kutusu">...</div>
+- Bölüm ayracı: <hr class="ayrac">
+
+Çıktın şu şekilde başlamalı:
+<div id="rapor-icerik">
+... (rapor içeriği) ...
+</div>`;
+
+        content.push({ type: 'text', text: htmlPrompt });
 
         const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
             method: 'POST',
@@ -63,51 +52,99 @@ export default async function handler(req, res) {
         const claudeData = await claudeRes.json();
         const aiRapor = claudeData.content?.[0]?.text || 'AI raporu oluşturulamadı.';
 
-        // Hasta bilgilerini de HTML'e çevir
+        // Hasta özetini HTML'e çevir
         const hastaHtml = (hastaOzeti || '')
-            .replace(/⚠️/g, '<span style="color:#c0152a;">⚠️</span>')
-            .replace(/🚨/g, '<span style="color:#c0152a;">🚨</span>')
-            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+            .replace(/⚠️/g, '<span style="color:#c0152a;font-weight:bold;">⚠️</span>')
+            .replace(/🚨/g, '<span style="color:#c0152a;font-weight:bold;">🚨</span>')
             .replace(/\n/g, '<br>');
+
+        const tarih = new Date().toLocaleDateString('tr-TR', {
+            day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
 
         const emailHtml = `<!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"></head>
-<body style="margin:0;padding:0;background:#f0f4f8;font-family:Arial,sans-serif;">
-<div style="max-width:720px;margin:24px auto;background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body { margin:0; padding:0; background:#eef2f7; font-family:Arial, Helvetica, sans-serif; }
+  .wrapper { max-width:700px; margin:24px auto; background:white; border-radius:12px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.1); }
 
-  <!-- HEADER -->
-  <div style="background:linear-gradient(135deg,#0d2d6b,#1a4a9e);padding:28px 32px;">
-    <div style="color:white;font-size:20px;font-weight:700;font-family:Georgia,serif;">Op. Dr. Tunç Koç</div>
-    <div style="color:rgba(255,255,255,0.75);font-size:12px;margin-top:4px;letter-spacing:1px;">İSTANBUL OMURGA SAĞLIĞI MERKEZİ · YENİ HASTA BAŞVURUSU</div>
-    <div style="margin-top:12px;background:rgba(255,255,255,0.15);border-radius:6px;padding:8px 14px;display:inline-block;">
-      <span style="color:white;font-size:13px;font-weight:600;">${new Date().toLocaleDateString('tr-TR', {day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'})}</span>
-    </div>
+  /* HEADER */
+  .header { background:linear-gradient(135deg, #0a2560 0%, #1a4a9e 100%); padding:28px 36px; }
+  .header-isim { color:white; font-size:22px; font-weight:700; font-family:Georgia,serif; letter-spacing:0.3px; }
+  .header-alt { color:rgba(255,255,255,0.7); font-size:11px; letter-spacing:2px; margin-top:4px; text-transform:uppercase; }
+  .header-tarih { display:inline-block; background:rgba(255,255,255,0.15); border-radius:6px; padding:6px 14px; margin-top:14px; color:white; font-size:12px; font-weight:600; }
+
+  /* BÖLÜM GENEL */
+  .bolum { padding:22px 36px; border-bottom:1px solid #eef2f7; }
+  .bolum:last-child { border-bottom:none; }
+  .bolum-hasta { background:#f8fafc; }
+
+  /* RAPOR İÇERİK STİLLERİ */
+  #rapor-icerik .bolum-baslik {
+    font-size:13px; font-weight:700; color:#0a2560;
+    text-transform:uppercase; letter-spacing:1.5px;
+    border-left:4px solid #0a2560; padding-left:10px;
+    margin:20px 0 12px;
+  }
+  #rapor-icerik .bolum-baslik:first-child { margin-top:0; }
+  #rapor-icerik .metin { font-size:14px; line-height:1.75; color:#2d3748; margin:8px 0; }
+  #rapor-icerik .vurgu { font-weight:700; color:#0a2560; }
+  #rapor-icerik .kirmizi { font-weight:700; color:#c0152a; }
+  #rapor-icerik .satir {
+    display:flex; align-items:flex-start; gap:8px;
+    font-size:13px; line-height:1.6; padding:5px 0;
+    border-bottom:1px solid #f0f4f8;
+  }
+  #rapor-icerik .satir:last-child { border-bottom:none; }
+  #rapor-icerik .etiket { color:#64748b; min-width:200px; font-weight:600; flex-shrink:0; }
+  #rapor-icerik .deger { color:#1e293b; }
+  #rapor-icerik .liste { margin:8px 0 8px 4px; padding-left:18px; }
+  #rapor-icerik .liste li { font-size:13px; line-height:1.8; color:#2d3748; }
+  #rapor-icerik .uyari-kutusu {
+    background:#fff0f0; border:1px solid #feb2b2; border-left:4px solid #c0152a;
+    border-radius:0 8px 8px 0; padding:12px 16px; margin:10px 0;
+    font-size:13px; line-height:1.7; color:#7b1a1a; font-weight:600;
+  }
+  #rapor-icerik .bilgi-kutusu {
+    background:#f0f7ff; border:1px solid #bee3f8; border-left:4px solid #2b6cb0;
+    border-radius:0 8px 8px 0; padding:12px 16px; margin:10px 0;
+    font-size:13px; line-height:1.7; color:#1a365d;
+  }
+  #rapor-icerik .ayrac { border:none; border-top:1px solid #e2e8f0; margin:16px 0; }
+  #rapor-icerik p { margin:6px 0; }
+
+  /* HASTA ÖZETİ ALANI */
+  .hasta-baslik { font-size:13px; font-weight:700; color:#0a2560; text-transform:uppercase; letter-spacing:1.5px; border-left:4px solid #64748b; padding-left:10px; margin-bottom:12px; }
+  .hasta-metin { font-size:13px; line-height:2; color:#374151; }
+
+  /* FOOTER */
+  .footer { background:#f1f5f9; padding:14px 36px; text-align:center; }
+  .footer p { margin:0; font-size:11px; color:#94a3b8; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <div class="header">
+    <div class="header-isim">Op. Dr. Tunç Koç</div>
+    <div class="header-alt">İstanbul Omurga Sağlığı Merkezi · Yeni Hasta Başvurusu</div>
+    <div class="header-tarih">📅 ${tarih}</div>
   </div>
 
-  <!-- AI RAPOR -->
-  <div style="padding:28px 32px;border-bottom:2px solid #f0f4f8;">
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
-      <div style="width:4px;height:24px;background:#0d2d6b;border-radius:2px;"></div>
-      <span style="font-size:13px;font-weight:700;color:#0d2d6b;text-transform:uppercase;letter-spacing:1px;">🤖 AI Klinik Değerlendirme</span>
-    </div>
-    <div style="font-size:14px;line-height:1.8;color:#1a1a1a;">
-      ${markdownToHtml(aiRapor)}
-    </div>
+  <div class="bolum">
+    ${aiRapor}
   </div>
 
-  <!-- HASTA BİLGİLERİ -->
-  <div style="padding:24px 32px;background:#f8fafc;border-bottom:2px solid #f0f4f8;">
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
-      <div style="width:4px;height:24px;background:#0d2d6b;border-radius:2px;"></div>
-      <span style="font-size:13px;font-weight:700;color:#0d2d6b;text-transform:uppercase;letter-spacing:1px;">📋 Hasta Özeti</span>
-    </div>
-    <div style="font-size:13px;line-height:2;color:#333;">${hastaHtml}</div>
+  <div class="bolum bolum-hasta">
+    <div class="hasta-baslik">📋 Hasta Özeti</div>
+    <div class="hasta-metin">${hastaHtml}</div>
   </div>
 
-  <!-- FOOTER -->
-  <div style="padding:16px 32px;background:#f0f4f8;">
-    <p style="margin:0;font-size:11px;color:#999;text-align:center;">Bu e-posta Op. Dr. Tunç Koç Kliniği Hasta Bilgi Formu sistemi tarafından otomatik oluşturulmuştur.</p>
+  <div class="footer">
+    <p>Bu e-posta Op. Dr. Tunç Koç Kliniği Hasta Bilgi Formu sistemi tarafından otomatik oluşturulmuştur.</p>
   </div>
 
 </div>
@@ -120,7 +157,7 @@ export default async function handler(req, res) {
             body: JSON.stringify({
                 from: 'Hasta Formu <onboarding@resend.dev>',
                 to: ['dr.tunckoc@gmail.com'],
-                subject: `🏥 Yeni Hasta Başvurusu — ${new Date().toLocaleDateString('tr-TR')}`,
+                subject: `🏥 Yeni Hasta Başvurusu — ${tarih}`,
                 html: emailHtml
             })
         });
