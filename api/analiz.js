@@ -162,7 +162,7 @@ KULLANILACAK HTML ELEMENTLERİ:
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${process.env.RESEND_API_KEY}` },
             body: JSON.stringify({
                 from: 'Hasta Formu <onboarding@resend.dev>',
-                to: ['dr.tunckoc@gmail.com'],
+                to: ['istanbulomurga@gmail.com'],
                 subject: `🏥 Yeni Hasta Başvurusu — ${tarih}`,
                 html: emailHtml
             })
