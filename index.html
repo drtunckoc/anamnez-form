@@ -886,9 +886,8 @@ ${(f.miy_denge === 'Evet' || f.miy_beceri === 'Evet') ? '🚨 MİYELOPATİ BELİ
         return html
             .split('\n')
             .filter(line => line.trim() !== '')
-            .join('\n');
-           .replace(/(<\/div>)\s*\n\s*\n\s*(<div)/g, '$1\n$2')
-           .replace(/>\s{2,}</g, '><');
+            .map(line => line.trim())
+            .join('');
     }; 
     const renderStep1 = () => (
         <div className="card">
