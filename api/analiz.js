@@ -56,11 +56,11 @@ KULLANILACAK HTML ELEMENTLERİ:
         const claudeData = await claudeRes.json();
         const aiRapor = claudeData.content?.[0]?.text || 'AI raporu oluşturulamadı.';
 
-        // Hasta özetini HTML'e çevir
-        const hastaHtml = (hastaOzeti || '')
-            .replace(/⚠️/g, '<span style="color:#c0152a;font-weight:bold;">⚠️</span>')
-            .replace(/🚨/g, '<span style="color:#c0152a;font-weight:bold;">🚨</span>')
-            .replace(/\n/g, '<br>');
+    const hastaHtml = (hastaOzeti || '')
+            .split('\n')
+            .filter(line => line.trim() !== '')
+            .map(line => `<p style="margin:1px 0;font-size:13px;line-height:1.5;">${line}</p>`)
+            .join('');
 
         const tarih = new Date().toLocaleDateString('tr-TR', {
             day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
@@ -150,7 +150,7 @@ KULLANILACAK HTML ELEMENTLERİ:
 
   <div class="bolum bolum-hasta">
     <div class="hasta-baslik">📋 Hasta Özeti</div>
-    <div class="hasta-metin">${hastaHtml.replace(/(\s*<br>\s*){2,}/g, '<br>')}</div>
+    <div class="hasta-metin">${hastaHtml}</div>
   </div>
 
   <div class="footer">
@@ -181,7 +181,11 @@ KULLANILACAK HTML ELEMENTLERİ:
                     patient_phone: hastaData.tel || '',
                     patient_name: hastaData.adSoyad || '',
                     ai_rapor: aiRapor,
-                    hasta_detay: hastaOzeti || '',
+                    hasta_detay: (hastaOzeti || '')
+                        .split('\n')
+                        .filter(line => line.trim() !== '')
+                        .map(line => `<p style="margin:1px 0;font-size:13px;line-height:1.5;">${line}</p>`)
+                        .join(''),
                     raw_data: hastaData
                 })
             });
