@@ -21,12 +21,16 @@ export default async function handler(req, res) {
         const htmlPrompt = prompt + `
 
 ÖNEMLİ FORMAT TALİMATI:
-Raporu düz metin veya markdown olarak DEĞİL, aşağıdaki HTML şablonunu kullanarak yaz.
+Raporu düz metin veya markdown olarak DEĞİL, saf HTML olarak yaz.
 Sadece <div id="rapor-icerik">...</div> etiketleri arasındaki içeriği üret.
+Yanıtını düz HTML olarak ver. Markdown code block (triple backtick) kullanma.
 Markdown kullanma (**, ##, | tablo vb. kullanma). Sadece HTML etiketleri kullan.
+HTML çıktısında <br> kullanma. Paragraflar için <p> kullan.
+Section başlıklarına emoji koyma, sadece metin yaz.
+Her section arasında tek satır boşluk bırak.
 
 KULLANILACAK HTML ELEMENTLERİ:
-- Bölüm başlığı: <div class="bolum-baslik">🚨 ACİLİYET</div>
+- Bölüm başlığı: <div class="bolum-baslik">ACİLİYET</div>
 - Normal metin: <p class="metin">...</p>
 - Önemli vurgu: <span class="vurgu">...</span>
 - Kırmızı uyarı: <span class="kirmizi">...</span>
