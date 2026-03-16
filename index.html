@@ -734,7 +734,7 @@ Tüm ilaçlar: ${f.tumIlaclar || 'Belirtilmedi'}`;
         setStep(8);
 
         try {
-            const body = { prompt: buildPrompt(), hastaOzeti: hastaDetayHTML() };
+            const body = { prompt: buildPrompt(), hastaOzeti: hastaDetayHTML(), rawData: f };
             if (radyolojiText) body.image = radyolojiText;
 
             const res = await fetch('/api/analiz', {
