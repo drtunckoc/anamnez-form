@@ -59,7 +59,6 @@ KULLANILACAK HTML ELEMENTLERİ:
     const hastaHtml = (hastaOzeti || '')
             .split('\n')
             .filter(line => line.trim() !== '')
-            .map(line => `<p style="margin:1px 0;font-size:13px;line-height:1.5;">${line}</p>`)
             .join('');
 
         const tarih = new Date().toLocaleDateString('tr-TR', {
@@ -184,7 +183,6 @@ KULLANILACAK HTML ELEMENTLERİ:
                     hasta_detay: (hastaOzeti || '')
                         .split('\n')
                         .filter(line => line.trim() !== '')
-                        .map(line => `<p style="margin:1px 0;font-size:13px;line-height:1.5;">${line}</p>`)
                         .join(''),
                     raw_data: hastaData
                 })
