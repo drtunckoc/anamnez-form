@@ -168,6 +168,22 @@ KULLANILACAK HTML ELEMENTLERİ:
             })
         });
 
+        try {
+            const hastaData = req.body.rawData || {};
+            await fetch('https://tunckocpanel.com/api/admin/patients/anamnez-form', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    patient_phone: hastaData.tel || '',
+                    patient_name: hastaData.adSoyad || '',
+                    ai_rapor: aiRapor,
+                    hasta_detay: hastaOzeti || '',
+                    raw_data: hastaData
+                })
+            });
+        } catch (panelError) {
+            console.error('Panel kayıt hatası:', panelError);
+        }
         return res.status(200).json({ result: aiRapor });
 
     } catch (error) {
