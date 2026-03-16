@@ -160,17 +160,6 @@ KULLANILACAK HTML ELEMENTLERİ:
 </body>
 </html>`;
 
-        await fetch('https://api.resend.com/emails', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${process.env.RESEND_API_KEY}` },
-            body: JSON.stringify({
-                from: 'Hasta Formu <onboarding@resend.dev>',
-                to: ['istanbulomurga@gmail.com'],
-                subject: `🏥 Yeni Hasta Başvurusu — ${tarih}`,
-                html: emailHtml
-            })
-        });
-
         try {
             const hastaData = req.body.rawData || {};
             await fetch('https://tunckocpanel.com/api/admin/patients/anamnez-form', {
