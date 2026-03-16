@@ -771,7 +771,7 @@ ${(f.miy_denge === 'Evet' || f.miy_beceri === 'Evet') ? '🚨 MİYELOPATİ BELİ
         const s = (etiket, deger) => {
             if (!deger || deger === '' || (Array.isArray(deger) && deger.length === 0)) return '';
             const val = Array.isArray(deger) ? deger.join(', ') : deger;
-            return `<div class="satir"><span class="etiket">${etiket}</span><span class="deger">${val}</span></div>`;
+            return `<div class="satir"><span class="etiket">${etiket}: </span><span class="deger">${val}</span></div>`;
         };
         const uyari = (etiket, deger) => {
             if (!deger || deger === '') return '';
