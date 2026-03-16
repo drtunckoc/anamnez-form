@@ -906,7 +906,8 @@ ${(f.miy_denge === 'Evet' || f.miy_beceri === 'Evet') ? '🚨 MİYELOPATİ BELİ
                     <Choices options={["Kadın","Erkek"]} value={f.cinsiyet} onChange={v => u('cinsiyet', v)} />
                 </div>
                 <div className="field-group">
-                    <label className="field-label">Telefon</label>
+                    <label className="field-label">Telefon *</label>
+                    <div style={{fontSize:12, color:"#64748b", marginBottom:6}}>Lütfen bizde kayıtlı telefon numaranızı giriniz.</div>
                     <input type="tel" placeholder="05XX XXX XX XX" value={f.tel} onChange={e => u('tel', e.target.value)} />
                 </div>
                 <div className="field-group">
@@ -1523,7 +1524,13 @@ ${(f.miy_denge === 'Evet' || f.miy_beceri === 'Evet') ? '🚨 MİYELOPATİ BELİ
                         <button className="btn-back" style={{visibility: step === 1 ? 'hidden' : 'visible'}}
                             onClick={() => setStep(s => s - 1)}>← Geri</button>
                         <button className="btn-next" disabled={loading}
-                            onClick={() => step === 7 ? generateReport() : setStep(s => s + 1)}>
+    onClick={() => {
+        if (step === 1 && !f.tel?.trim()) {
+            alert('Lütfen telefon numaranızı giriniz.');
+            return;
+        }
+        step === 7 ? generateReport() : setStep(s => s + 1);
+    }}>
                             {step === 7 ? (loading ? '⏳ Analiz ediliyor...' : '✓ Tamamla ve Gönder') : 'İleri →'}
                         </button>
                     </div>
