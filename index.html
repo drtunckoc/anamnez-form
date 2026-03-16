@@ -884,7 +884,9 @@ ${(f.miy_denge === 'Evet' || f.miy_beceri === 'Evet') ? '🚨 MİYELOPATİ BELİ
         `;
         // Boş satırları temizle
         return html.replace(/(<div class="alt-baslik">.*?<\/div>)\s*(<div class="alt-baslik">)/g, '$1$2')
-                   .replace(/\n\s*\n\s*\n/g, '\n');
+           .replace(/\n\s*\n\s*\n/g, '\n')
+           .replace(/(<\/div>)\s*\n\s*\n\s*(<div)/g, '$1\n$2')
+           .replace(/>\s{2,}</g, '><');
     }; 
     const renderStep1 = () => (
         <div className="card">
