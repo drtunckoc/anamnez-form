@@ -641,7 +641,7 @@ TEMEL KURALLAR:
 
 ---
 
-🚨 ACİLİYET DERECESİ
+ACİLİYET DERECESİ
 ${(f.belKuvvetKaybi === 'Evet' || f.boyunKuvvetKaybi === 'Evet') ? '⚠️ MOTOR DEFİSİT MEVCUT — aşağıda detay' : ''}
 ${(f.ke_idrarYapamama === 'Evet' || f.ke_diskiYapamama === 'Evet') ? '🚨 KAUDA EKUİNA ŞÜPHESİ — ACİL DEĞERLENDİR' : ''}
 ${(f.miy_denge === 'Evet' || f.miy_beceri === 'Evet') ? '🚨 MİYELOPATİ BELİRTİSİ — ACİL DEĞERLENDİR' : ''}
@@ -649,7 +649,7 @@ ${(f.miy_denge === 'Evet' || f.miy_beceri === 'Evet') ? '🚨 MİYELOPATİ BELİ
 
 ---
 
-👤 HASTA ÖZETİ
+HASTA ÖZETİ
 - Demografik: ${f.yas} yaş / ${f.cinsiyet} / BMI ${f.boy && f.kilo ? (f.kilo / ((f.boy/100)**2)).toFixed(1) : '?'} / ${f.meslek}
 - Ana Şikayet: ${[...f.boyunGrubu, ...f.belGrubu].join(', ')} — ${f.temelSikayet.join(', ')}
 - Süre ve seyir: ${f.belBaslangic || f.boyunBaslangic || 'Belirtilmedi'} — ${f.belArtis || f.boyunArtis || 'Belirtilmedi'}
@@ -659,7 +659,7 @@ ${hasBel ? `- Yürüme mesafesi: ${f.belYurumeMesafesi || 'belirtilmedi'}` : ''}
 
 ---
 
-🧠 KLİNİK ÖNGÖRÜ (Ön Tanı)
+KLİNİK ÖNGÖRÜ (Ön Tanı)
 - Muhtemel Seviye: (form verilerine göre en olası spinal seviye/seviyeler)
 - Patoloji Şüphesi: (disk hernisi, stenoz, faset artropati, radikülopati vb.)
 ${hasBel ? `- Bel ağrısı: Şiddet ${f.belSiddet}/10, artar: ${f.belAgriArtar.join(', ')}, azalır: ${f.belAgriAzalir.join(', ')}` : ''}
@@ -671,7 +671,7 @@ ${hasBoyun && f.boyunHisKaybi === 'Evet' ? `- His kaybı (Boyun): ${Array.isArra
 
 ---
 
-⚡ NÖROLOJİK BULGULAR
+NÖROLOJİK BULGULAR
 ${(f.belKuvvetKaybi === 'Evet' || f.boyunKuvvetKaybi === 'Evet') ? `MOTOR DEFİSİT: VAR
 - Etkilenen hareket: ${f.belKuvvetNe ? (Array.isArray(f.belKuvvetNe) ? f.belKuvvetNe.join(', ') : f.belKuvvetNe) : ''} ${f.boyunKuvvetNe ? (Array.isArray(f.boyunKuvvetNe) ? f.boyunKuvvetNe.join(', ') : f.boyunKuvvetNe) : ''}
 - Başlangıç: ${f.belKuvvetDetay || f.boyunKuvvetDetay || 'belirtilmedi'}
@@ -692,7 +692,7 @@ ${hasBoyun ? `SERVİKAL MİYELOPATİ (Servikal şikayet nedeniyle sorgulandı):
 
 ---
 
-🩺 MUAYENE STRATEJİSİ (Öncelik Sırası)
+MUAYENE STRATEJİSİ (Öncelik Sırası)
 1. Motor Güç: (hangi kas grupları, hangi miyotomlar — spesifik yaz)
 2. Provokasyon: (SLR / Femoral Stretch / Spurling / diğer)
 3. Refleks/Duyu: (Patella, Aşil, Babinski, klonus, dermatomal kontrol)
@@ -700,7 +700,7 @@ ${hasBoyun ? `SERVİKAL MİYELOPATİ (Servikal şikayet nedeniyle sorgulandı):
 
 ---
 
-📋 TEDAVİ ÖYKÜSÜ DEĞERLENDİRMESİ
+TEDAVİ ÖYKÜSÜ DEĞERLENDİRMESİ
 - İlaç: ${f.ilacKullanim}${f.ilacFayda ? ' → Fayda: ' + f.ilacFayda : ''}
 - Fizik tedavi: ${f.fizikTedavi}${f.fizikTedavi === 'Evet' ? ` → ${f.fizikKacKez}, ${f.fizikNeSaman}, Fayda: ${f.fizikFayda}` : ''}
 - Girişimsel: ${f.girisimselTedavi}${f.girisimselTedavi === 'Evet' ? ` → ${f.girisimselNe.join(', ')}, ${f.girisimselKacKez}, ${f.girisimselNeSaman}, Fayda: ${f.girisimselFayda}` : ''}
@@ -709,7 +709,7 @@ ${hasBoyun ? `SERVİKAL MİYELOPATİ (Servikal şikayet nedeniyle sorgulandı):
 
 ---
 
-📍 AKSİYON PLANI
+AKSİYON PLANI
 - Görüntüleme: ${f.goruntulemeVar === 'Evet' ? `Mevcut: ${f.goruntulemeHangi.join(', ')} (${f.goruntulumeTarih})` : 'Görüntüleme yok'}
 - (Mevcut görüntüleme yeterli mi? Ek tetkik gerekli mi? EMG?)
 ${f.kanSulandirici === 'Evet' ? `- ⚠️ KAN SULANDIRICI: ${f.kanSulandiriciAd} — girişim planlamasında dikkate al` : ''}
@@ -718,7 +718,7 @@ ${f.ekNot ? `- ⚠️ HASTA TERCİHİ / NOTU (MUTLAKA DİKKATE AL): "${f.ekNot}"
 - Sorgulanması gereken eksik bilgiler: (formda yanıtlanmayan önemli sorular varsa yaz)
 
 ${radyolojiText ? `---
-📸 RADYOLOJİ RAPORU YORUMU
+RADYOLOJİ RAPORU YORUMU
 Yüklenen raporu klinik tablo ile karşılaştır. Klinik-radyolojik uyum var mı?` : ''}
 
 ---
@@ -759,10 +759,10 @@ Tüm ilaçlar: ${f.tumIlaclar || 'Belirtilmedi'}`;
     const hastaOzetiWithReport = (rapor) => `🏥 *YENİ HASTA BAŞVURUSU*
 *Op. Dr. Tunç Koç Kliniği*
 
-👤 ${f.adSoyad} | ${f.yas} yaş | ${f.cinsiyet}
-📞 ${f.tel}
-📍 ${f.sehir} / ${f.meslek}
-🩺 Şikayet: ${[...f.boyunGrubu, ...f.belGrubu].join(', ') || f.temelSikayet.join(', ')}
+${f.adSoyad} | ${f.yas} yaş | ${f.cinsiyet}
+${f.tel}
+${f.sehir} / ${f.meslek}
+Şikayet: ${[...f.boyunGrubu, ...f.belGrubu].join(', ') || f.temelSikayet.join(', ')}
 ${(f.belKuvvetKaybi === 'Evet' || f.boyunKuvvetKaybi === 'Evet') ? '⚠️ KUVVET KAYBI VAR' : ''}
 ${(f.ke_idrarYapamama === 'Evet' || f.ke_diskiYapamama === 'Evet') ? '🚨 KAUDA EKUİNA BELİRTİSİ' : ''}
 ${(f.miy_denge === 'Evet' || f.miy_beceri === 'Evet') ? '🚨 MİYELOPATİ BELİRTİSİ' : ''}`;
@@ -782,7 +782,7 @@ ${(f.miy_denge === 'Evet' || f.miy_beceri === 'Evet') ? '🚨 MİYELOPATİ BELİ
         const bmi = f.boy && f.kilo ? (f.kilo/((f.boy/100)**2)).toFixed(1) : '?';
 
         const html = `
-            ${baslik('👤 Kişisel Bilgiler')}
+            ${baslik('Kişisel Bilgiler')}
             ${s('Ad Soyad', f.adSoyad)}
             ${s('Yaş', f.yas + ' yaş')}
             ${s('Cinsiyet', f.cinsiyet)}
@@ -791,12 +791,12 @@ ${(f.miy_denge === 'Evet' || f.miy_beceri === 'Evet') ? '🚨 MİYELOPATİ BELİ
             ${s('Şehir', f.sehir)}
             ${s('Telefon', f.tel)}
 
-            ${baslik('🩺 Ana Şikayet')}
+            ${baslik('Ana Şikayet')}
             ${s('Temel şikayet', f.temelSikayet)}
             ${s('Boyun şikayeti', f.boyunGrubu)}
             ${s('Bel şikayeti', f.belGrubu)}
 
-            ${hasBoyun ? baslik('🔵 Boyun Bölgesi') : ''}
+            ${hasBoyun ? baslik('Boyun Bölgesi') : ''}
             ${hasBoyun ? s('Taraf', f.boyunTaraf) : ''}
             ${hasBoyun ? s('Ağrı yayılımı', f.boyunYayilim) : ''}
             ${hasBoyun ? s('Ağrı süresi', f.boyunBaslangic) : ''}
@@ -814,7 +814,7 @@ ${(f.miy_denge === 'Evet' || f.miy_beceri === 'Evet') ? '🚨 MİYELOPATİ BELİ
             ${hasBoyun ? s('Bacak sertliği (miyelopati)', f.miy_bacakSertlik) : ''}
             ${hasBoyun ? s('İdrar tutamama (miyelopati)', f.miy_idrar) : ''}
 
-            ${hasBel ? baslik('🟠 Bel Bölgesi') : ''}
+            ${hasBel ? baslik('Bel Bölgesi') : ''}
             ${hasBel ? s('Taraf', f.belTaraf) : ''}
             ${hasBel ? s('Ağrı yayılımı', f.belYayilim) : ''}
             ${hasBel ? s('Ağrı süresi', f.belBaslangic) : ''}
@@ -833,13 +833,13 @@ ${(f.miy_denge === 'Evet' || f.miy_beceri === 'Evet') ? '🚨 MİYELOPATİ BELİ
             ${hasBel ? s('Kasık/anüs uyuşması', f.ke_kasikUyusma) : ''}
             ${hasBel ? s('Her iki bacak güçsüzlük', f.ke_ikiBacakGucsuzluk) : ''}
 
-            ${baslik('📸 Görüntüleme')}
+            ${baslik('Görüntüleme')}
             ${s('Radyolojik görüntüleme var mı', f.goruntulemeVar)}
             ${f.goruntulemeVar === 'Evet' ? s('Tetkik türü', f.goruntulemeHangi) : ''}
             ${f.goruntulemeVar === 'Evet' ? s('Görüntüleme bölgesi', f.goruntulumeBolge) : ''}
             ${f.goruntulemeVar === 'Evet' ? s('Son MRI ne zaman', f.goruntulumeTarih) : ''}
 
-            ${baslik('💊 Tedavi Öyküsü')}
+            ${baslik('Tedavi Öyküsü')}
             ${s('İlaç kullanımı', f.ilacKullanim)}
             ${f.ilacKullanim === 'Evet' ? s('İlaç faydası', f.ilacFayda) : ''}
             ${s('Fizik tedavi (fizyoterapi)', f.fizikTedavi)}
@@ -852,7 +852,7 @@ ${(f.miy_denge === 'Evet' || f.miy_beceri === 'Evet') ? '🚨 MİYELOPATİ BELİ
             ${f.girisimselTedavi === 'Evet' ? s('En son ne zaman', f.girisimselNeSaman) : ''}
             ${f.girisimselTedavi === 'Evet' ? s('Girişimsel tedavi faydası', f.girisimselFayda) : ''}
 
-            ${baslik('🔪 Ameliyat Öyküsü')}
+            ${baslik('Ameliyat Öyküsü')}
             ${s('Omurga ameliyatı geçirdi mi', f.ameliyatVar)}
             ${f.ameliyatVar === 'Evet' ? s('Ameliyat sayısı', f.ameliyatKacKez) : ''}
             ${f.ameliyatVar === 'Evet' ? s('1. Ameliyat türü', f.am1_ne) : ''}
@@ -867,16 +867,16 @@ ${(f.miy_denge === 'Evet' || f.miy_beceri === 'Evet') ? '🚨 MİYELOPATİ BELİ
             ${f.ameliyatVar === 'Evet' && f.ameliyatKacKez === '3 ve üzeri' ? s('3. Ameliyat zamanı', f.am3_zaman) : ''}
             ${f.ameliyatVar === 'Evet' && f.ameliyatKacKez === '3 ve üzeri' ? s('3. Ameliyat faydası', f.am3_fayda) : ''}
 
-            ${baslik('🌙 Günlük Yaşam Etkisi')}
+            ${baslik('Günlük Yaşam Etkisi')}
             ${s('Yaşam kalitesi bozuldu mu', f.yasamKalitesi)}
             ${s('Uyku etkileniyor mu', f.uyku)}
             ${s('Meslek etkileniyor mu', f.meslek_etki)}
             ${s('Oturma toleransı', f.oturmaTolerans)}
             ${s('Aktivite kısıtlılığı', f.aktiviteKisitlilik)}
 
-            ${baslik('❤️ Genel Sağlık')}
+            ${baslik('Genel Sağlık')}
             ${s('Kronik hastalıklar', f.kronikHastalik.length > 0 ? f.kronikHastalik.join(', ') : 'Yok')}
-            ${f.kanSulandirici === 'Evet' ? uyari('🔴 Kan sulandırıcı kullanıyor', f.kanSulandiriciAd || 'İsim belirtilmedi') : s('Kan sulandırıcı', 'Hayır')}
+            ${f.kanSulandirici === 'Evet' ? uyari('Kan sulandırıcı kullanıyor', f.kanSulandiriciAd || 'İsim belirtilmedi') : s('Kan sulandırıcı', 'Hayır')}
             ${s('Kullandığı tüm ilaçlar', f.tumIlaclar)}
             ${s('Sigara', f.sigara)}
             ${s('Alkol', f.alkol)}
@@ -1017,7 +1017,7 @@ ${(f.miy_denge === 'Evet' || f.miy_beceri === 'Evet') ? '🚨 MİYELOPATİ BELİ
                 </FG>
 
                 <div className="emergency-box">
-                    <div className="emergency-title">🔴 Omurilik Basısı Belirtileri</div>
+                    <div className="emergency-title">Omurilik Basısı Belirtileri</div>
                     <FG label="Yürürken denge kaybı oluyor mu?">
                         <YN value={f.miy_denge} onChange={v => u('miy_denge', v)} />
                     </FG>
@@ -1082,7 +1082,7 @@ ${(f.miy_denge === 'Evet' || f.miy_beceri === 'Evet') ? '🚨 MİYELOPATİ BELİ
                 </FG>
 
                 <div className="emergency-box">
-                    <div className="emergency-title">🔴 Kauda Equina Belirtileri</div>
+                    <div className="emergency-title">Kauda Equina Belirtileri</div>
                     <FG label="İdrar yapmakta zorlanıyor musunuz?">
                         <YN value={f.ke_idrarYapamama} onChange={v => u('ke_idrarYapamama', v)} />
                     </FG>
@@ -1277,7 +1277,7 @@ ${(f.miy_denge === 'Evet' || f.miy_beceri === 'Evet') ? '🚨 MİYELOPATİ BELİ
                 <Choices options={["Diyabet","Tansiyon","Kalp hastalığı","Osteoporoz","Kanser","Yok"]} value={f.kronikHastalik} onChange={v => u('kronikHastalik', v)} multi />
             </FG>
             <div className="emergency-box">
-                <div className="emergency-title">🔴 Kan Sulandırıcı</div>
+                <div className="emergency-title">Kan Sulandırıcı</div>
                 <FG label="Kan sulandırıcı ilaç kullanıyor musunuz?" sublabel="Coumadin, Xarelto, Plavix, Aspirin...">
                     <YN value={f.kanSulandirici} onChange={v => u('kanSulandirici', v)} />
                 </FG>
@@ -1350,14 +1350,14 @@ ${(f.miy_denge === 'Evet' || f.miy_beceri === 'Evet') ? '🚨 MİYELOPATİ BELİ
                             <b>Şikayet:</b> {[...f.boyunGrubu, ...f.belGrubu].join(', ') || f.temelSikayet.join(', ')}<br/>
                             {f.belKuvvetKaybi === 'Evet' && <><b style={{color:'#c0152a'}}>⚠️ Kuvvet kaybı:</b> {Array.isArray(f.belKuvvetNe) ? f.belKuvvetNe.join(', ') : f.belKuvvetNe}<br/></>}
                             {f.boyunKuvvetKaybi === 'Evet' && <><b style={{color:'#c0152a'}}>⚠️ Boyun kuvvet kaybı:</b> {Array.isArray(f.boyunKuvvetNe) ? f.boyunKuvvetNe.join(', ') : f.boyunKuvvetNe}<br/></>}
-                            {(f.ke_idrarYapamama === 'Evet' || f.ke_diskiYapamama === 'Evet') && <><b style={{color:'#c0152a'}}>🚨 Kauda Ekuina belirtisi var!</b><br/></>}
+                            {(f.ke_idrarYapamama === 'Evet' || f.ke_diskiYapamama === 'Evet') && <><b style={{color:'#c0152a'}}>Kauda Ekuina belirtisi var!</b><br/></>}
                             <b>Görüntüleme:</b> {f.goruntulemeVar === 'Evet' ? `${f.goruntulemeHangi.join(', ')} — ${f.goruntulumeTarih}` : 'Yok'}<br/>
                             <b>İlaç:</b> {f.ilacKullanim}{f.ilacFayda ? ` (${f.ilacFayda})` : ''}<br/>
                             <b>Fizik tedavi:</b> {f.fizikTedavi}{f.fizikTedavi === 'Evet' ? ` — ${f.fizikNeSaman}, Fayda: ${f.fizikFayda}` : ''}<br/>
                             <b>Girişimsel:</b> {f.girisimselTedavi}{f.girisimselTedavi === 'Evet' ? ` — ${f.girisimselNe.join(', ')}, ${f.girisimselNeSaman}, Fayda: ${f.girisimselFayda}` : ''}<br/>
                             <b>Ameliyat:</b> {f.ameliyatVar === 'Evet' ? `${f.ameliyatKacKez} ameliyat — ${f.am1_ne}, ${f.am1_zaman}` : 'Hayır'}<br/>
                             <b>Kronik:</b> {f.kronikHastalik.join(', ') || 'Yok'} | <b>İlaçlar:</b> {f.tumIlaclar || 'Belirtilmedi'}<br/>
-                            {f.kanSulandirici === 'Evet' && <><b style={{color:'#c0152a'}}>🔴 Kan sulandırıcı:</b> {f.kanSulandiriciAd}<br/></>}
+                            {f.kanSulandirici === 'Evet' && <><b style={{color:'#c0152a'}}>Kan sulandırıcı:</b> {f.kanSulandiriciAd}<br/></>}
                             {f.ekNot && <><b>Hasta notu:</b> {f.ekNot}<br/></>}
                         </div>
                     </div>
@@ -1456,7 +1456,7 @@ ${(f.miy_denge === 'Evet' || f.miy_beceri === 'Evet') ? '🚨 MİYELOPATİ BELİ
                         <div style={{marginBottom:12, paddingBottom:12, borderBottom:'1px solid #e8edf5'}}>
                             <strong style={{color:'var(--navy)'}}>GENEL SAĞLIK</strong><br/>
                             Kronik hastalıklar: {f.kronikHastalik.join(', ') || 'Yok'}<br/>
-                            {f.kanSulandirici === 'Evet' && <span style={{color:'var(--red)', fontWeight:700}}>🔴 KAN SULANDIRICI: {f.kanSulandiriciAd || 'Belirtilmedi'}<br/></span>}
+                            {f.kanSulandirici === 'Evet' && <span style={{color:'var(--red)', fontWeight:700}}>KAN SULANDIRICI: {f.kanSulandiriciAd || 'Belirtilmedi'}<br/></span>}
                             Tüm ilaçlar: {f.tumIlaclar || 'Belirtilmedi'}<br/>
                             Sigara: {f.sigara || '-'} | Alkol: {f.alkol || '-'}
                         </div>
@@ -1468,12 +1468,12 @@ ${(f.miy_denge === 'Evet' || f.miy_beceri === 'Evet') ? '🚨 MİYELOPATİ BELİ
                         )}
                         {(f.ke_idrarYapamama === 'Evet' || f.ke_diskiYapamama === 'Evet' || f.ke_kasikUyusma === 'Evet') && (
                             <div style={{color:'var(--red)', fontWeight:700, marginTop:8}}>
-                                🚨 KAUDA EQUİNA BELİRTİLERİ VAR — ACİL DEĞERLENDİRME GEREKEBİLİR
+                                KAUDA EQUİNA BELİRTİLERİ VAR — ACİL DEĞERLENDİRME GEREKEBİLİR
                             </div>
                         )}
                         {(f.miy_denge === 'Evet' || f.miy_beceri === 'Evet' || f.miy_bacakSertlik === 'Evet') && (
                             <div style={{color:'var(--red)', fontWeight:700, marginTop:8}}>
-                                🚨 MİYELOPATİ BELİRTİLERİ VAR — ACİL DEĞERLENDİRME GEREKEBİLİR
+                                MİYELOPATİ BELİRTİLERİ VAR — ACİL DEĞERLENDİRME GEREKEBİLİR
                             </div>
                         )}
                     </div>
